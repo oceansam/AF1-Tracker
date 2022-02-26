@@ -1,9 +1,14 @@
 <template>
   <div class="root">
-    <Header class="q-my-xl" />
+    <Header
+      class="q-my-xl"
+      @update="filterList"
+      :itemsShown="forceList_nike.length"
+      :totalItems="bulk_list.length"
+    />
     <div class="row justify-center q-gutter-md q-py-md">
-      <div v-for="(prod, index) in footlocker_list" :key="index">
-        <shoe-display :product="prod" />
+      <div v-for="(prod, index) in forceList_nike" :key="index">
+        <shoe-display :product="prod" brand="Nike" />
       </div>
     </div>
   </div>
@@ -23,20 +28,36 @@ export default defineComponent({
   },
   setup() {
     const reqUrl =
-      "https://api.nike.com/product_feed/threads/v2?filter=language(en)&filter=marketplace(US)&filter=channelId(d9a5bc42-4b9c-4976-858a-f159cf99c647)&filter=productInfo.merchProduct.styleColor(CW2288-001,DD8959-100,DO6394-100,CI0919-100,DC9486-101,CT2302-002,CJ9179-200,DD8959-001,BQ6806-100,DO6394-001,DC4831-100,CT3839-104)";
+      "https://api.nike.com/cic/browse/v2?queryid=products&anonymousId=C04F3B67B5F256B29EBF08C129DA9AE6&country=us&endpoint=%2Fproduct_feed%2Frollup_threads%2Fv2%3Ffilter%3Dmarketplace(US)%26filter%3Dlanguage(en)%26filter%3DemployeePrice(true)%26filter%3DattributeIds(0f64ecc7-d624-4e91-b171-b83a03dd8550%2C8529ff38-7de8-4f69-973c-9fdbfb102ed2%2C16633190-45e5-4830-a068-232ac7aea82c)%26anchor%3D0%26consumerChannelId%3Dd9a5bc42-4b9c-4976-858a-f159cf99c647%26count%3D24&language=en&localizedRangeStr=%7BlowestPrice%7D%20%E2%80%94%20%7BhighestPrice%7D";
+    const forceList_nike = ref([]);
+    const bulk_list = ref([]);
 
-    const footlocker_list = ref([]);
+    async function init() {
+      // Request and Parse
+      const res_nike = await axios.get(reqUrl);
+      const shoeList = res_nike.data.data.products.products;
+      bulk_list.value = shoeList;
+      forceList_nike.value = shoeList;
+    }
+
+    function filterList(saleVal) {
+      const copy = bulk_list.value;
+      if (saleVal.value) {
+        forceList_nike.value = copy.filter((shoe) => shoe.price.discounted);
+      } else {
+        forceList_nike.value = bulk_list.value;
+      }
+    }
+
     onMounted(async () => {
-      const res = await axios.get(reqUrl);
-      const productList = res.data.objects.map((obj) => {
-        return obj.productInfo[0];
-      });
-      footlocker_list.value = productList;
-      console.log(footlocker_list);
+      await init();
+      filterList();
     });
 
     return {
-      footlocker_list,
+      forceList_nike,
+      bulk_list,
+      filterList,
     };
   },
 });
