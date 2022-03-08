@@ -6,6 +6,7 @@
   "author": "Sam <oceansam101@gmail.com>",
   "private": true,
   "scripts": {
+    "build": "quasar build",
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
