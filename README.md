@@ -1,22 +1,7 @@
-# vue-quasar-v2 (vue-quasar-boilerplate-v2)
-
-vue-quasar-boilerplate for general use
-
-## Install the dependencies
-```bash
-yarn
-```
-
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
-```bash
-quasar dev
-```
+# Airforce 1 Tracker
 
 
-### Build the app for production
-```bash
-quasar build
-```
+![image](https://user-images.githubusercontent.com/56453957/157167888-dc1ed4ea-cf1a-4eaa-9ad9-38ae4ef4a0f2.png)
 
-### Customize the configuration
-See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
+
+Quick platform I wanted to make to browse air force 1s with ease. I wanted a simpler UI to just query the airforces I wanted to view with the option to filter for sales.
